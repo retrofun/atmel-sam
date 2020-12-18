@@ -1,0 +1,251 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Description" content="
+BEGIN PYTHON-PACKAGE-INFO 1.0
+Current-Version:        0.5
+Title:                  Sam_I_Am -- An interface for Atmel AT91SAM7S microcontrollers
+Home-page:              http://claymore.engineer.gvsu.edu/~steriana/Software
+Description:            Interacts with an AT91SAM7S microcontroller
+Keywords:               AT91SAM7S SAM-BA Linux interface
+Author:                 Andrew Sterian, mailto:steriana@gvsu.edu
+Maintained-by:          The author
+Primary-site:           http://claymore.engineer.gvsu.edu/~steriana/Software
+Alternate-site:         None
+Original-site:          Same as primary site
+Platform:               Linux
+Copying-policy:         Free software, see copyright info below for details
+Difficulty-rating:      Some installation required
+System-requirements:    None
+Software-requirements:  Python 2.3
+
+This program is useful for USB communication with an Atmel AT91SAM7S
+microcontroller running the SAM-BA monitor program. It allows you to read and
+write memory, send programs to RAM or FLASH, and display device information.
+
+END PYTHON-PACKAGE-INFO
+">
+  <title>Sam_I_Am -- An interface for Atmel AT91SAM7S microcontrollers</title>
+</head>
+<body>
+<p><font size="+2">Sam_I_Am -- An interface for Atmel AT91SAM7S microcontrollers </font></p>
+
+<blockquote>
+  <p><a href="http://claymore.engineer.gvsu.edu/~steriana"><font size="-1">Andrew Sterian</font></a><font size="-1"><br>
+  Padnos College of Engineering and Computing<br>
+  Grand Valley State University</font></p>
+</blockquote>
+
+<p><hr align="LEFT"><table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr>
+    <td>Top-Level | <a href="connecting.html">Connecting the Device</a> | <a href="invoking.html">Program Operation</a> | <a href="commands.html">Commands</a></td>
+    <td align="RIGHT"><font size="-1">Version 0.5</font></td>
+  </tr>
+  <tr>
+    <td><!-- --></td>
+    <td align="RIGHT"><font size="-1">June 25, 2009</font></td> 
+  </tr>
+  <tr>
+    <td>
+    <font size="-1"><a href="#Installation">Installation</a> | <a href="#Requirements">Requirements</a> | <a href="#Copyright">Copyright</a> | <a href="#Todo">To Do</a> | <a href="#Credits">Credits</a> | <a href="#History">History</a></font></td> 
+    <td><!-- --></td>
+  </tr>
+</table><hr align="LEFT"></p>
+
+<h2>What's New</h2>
+<p>In release 0.5:
+<ul>
+<li>The AT91SAM7SE512 is recognized for FLASH programming.</li>
+</ul>
+
+<p>In release 0.4:
+<ul>
+<li>Devices with only 8K of RAM, like the AT91SAM7S321 can now have their FLASH programmed.</li>
+</ul>
+
+<p>In release 0.3:
+<ul>
+<li>Fixed a bug that prevented <tt>go</tt> commands from properly executing
+in some cases when it was the last command specified on the command line. Thanks
+to Edwin Olson for tracking this down.</li>
+<li>The <tt>info aic</tt> command had the sense of external and internal
+interrupt sources reversed in the <tt>AIC_SMRx</tt> register.</li>
+<li>The <tt>info tc</tt> command had the TIOA and TIOB sources reversed
+when displaying external trigger sources.</li>
+<li>The <tt>help flash</tt> command mistakenly said the command was used
+to program RAM.</li>
+</ul>
+
+<p>In release 0.2:
+<ul>
+<li>FLASH programming is now supported.</li>
+<li>More <tt>info</tt> displayers were added.</li>
+<li>Added <tt>tgo</tt> command to execute Thumb code.</li>
+<li>Added <tt>disp</tt> command to display user program output.</li>
+</ul>
+
+<p>In release 0.1:
+<ul>
+<li>First release</li>
+</ul>
+
+<p><a name="Introduction"></a></p>
+<h2>Introduction</h2>
+
+  <p>Sam_I_Am is a program for interacting with an Atmel <a href="http://www.at91.com/">AT91SAM7S</a> microcontroller running the SAM-BA monitor program. It
+  was specifically designed for Linux users who want to connect to their
+  device using the USB port. Neither Windows nor the serial port is supported.
+  <p>Using Sam_I_Am a developer can:
+  <ul>
+  <li>Read and write memory/peripheral locations</li>
+  <li>Send and receive Intel HEX format files to either RAM or FLASH</li>
+  <li>Execute code on the microcontroller</li>
+  <li>Display microcontroller peripheral status</li>
+  </ul>
+  
+  <p>You can download the latest version of Sam_I_Am from:
+  <p><center><a href="http://claymore.engineer.gvsu.edu/~steriana/Software"><code>http://claymore.engineer.gvsu.edu/~steriana/Software</code></a></center>
+
+<p><a name="Requirements"></a></p>
+<h2>Requirements</h2>
+  <p>Sam_I_Am is written in pure <a href="http://www.python.org/">Python</a>. It
+  depends upon the following software packages for operation:
+  <ul>
+  <li><a href="http://www.python.org/">Python</a> version 2.3 or later</li>
+  </ul>
+
+  <p>Sam_I_Am only runs under Linux. It requires a 2.4 or 2.6 kernel with
+  the <tt>usbserial</tt> generic USB serial driver. Sam_I_Am does not work
+  with a standard serial port nor with a USB-to-serial converter.
+
+<p><a name="Installation"></a></p>
+<h2>Installation</h2>
+
+<p>First, install all of the packages listed above in the Requirements section.
+
+<p>Extract the <tt>Sam_I_Am.XX.YY.tar.gz</tt> file (where XX.YY is the version) then install as follows:</p>
+<ul>
+<tt>python setup.py install</tt>&nbsp;&nbsp;&nbsp;(You may need to be root to install to system directories)
+</ul>
+<p>The installer will create and populate the following directories/files:</p>
+<ul>
+<pre>
+/usr/lib/python2.3/site-packages/Sam_I_Am
+/usr/lib/python2.3/Sam_I_Am
+/usr/bin/Sam_I_Am
+</pre>
+</ul>
+<p>The above assumes your Python library directory is as indicated (it may be
+elsewhere but the installer should be able to find it, so don't worry about
+it). The first directory is where the actual program resides. The second
+directory contains the documentation, example files, etc. A sample program for
+invoking Sam_I_Am is installed as <tt>/usr/bin/Sam_I_Am</tt>...feel free to rename it or move it somewhere else.
+
+<p><a name="Running"></a></p>
+<h2>Running Sam_I_Am</h2>
+
+<p>You run Sam_I_Am in a console/terminal session. You must invoke the Python interpreter on the <tt>samiam.py</tt> file of the <tt>Sam_I_Am</tt> package. For example:</p>
+<pre><center>python /usr/lib/python2.3/site-packages/Sam_I_Am/samiam.py</center></pre>
+<p>The <tt>Sam_I_Am</tt> shell script that comes with this software contains an
+example for running Sam_I_Am, modelled on the above. By default, this shell
+script is installed in <tt>/usr/bin</tt> so you should just be able
+to type <tt>Sam_I_Am</tt> from a shell prompt.
+
+<p>The <a href="invoking.html">Program Operation</a> page describes the
+operation of the program and its command-line options. The <a href="connecting.html">Connecting the Device</a> page describes the process of connecting the
+microcontroller board to your computer using USB.
+
+<p>A sample application is included in the <tt>sample</tt> subdirectory of the Sam_I_Am installation, most likely
+<tt>/usr/lib/python2.3/Sam_I_Am/sample</tt> or similar.
+
+<p><a name="Copyright"></a></p>
+<h2>Copyright &amp; License</h2>
+
+  <p>Copyright &COPY; 2008 <a href="http://claymore.engineer.gvsu.edu/~steriana">Andrew Sterian</a>. All Rights Reserved.
+  mailto: <a href="mailto:steriana@claymore.engineer.gvsu.edu?subject=Sam_I_Am">steriana@claymore.engineer.gvsu.edu</a>
+  <p>Sam_I_Am comes with ABSOLUTELY NO WARRANTY. This
+  is free software licensed under the terms of the <a href="gpl.html">GNU General
+  Public License</a>. You are welcome to redistribute this software
+  under certain conditions. For more details, see the previous link or
+  visit <a href="http://www.fsf.org/">The Free Software Foundation</a>.
+
+<p><a name="Todo"></a></p>
+<h2>To Do</h2>
+
+  <ol>
+    <li>Finish all <tt>info</tt> displayers</li>
+    <li>FLASH region locking/unlocking</li>
+  </ol>
+
+<p><a name="Credits"></a></p>
+
+<h2>Credits</h2>
+  <p>This help file is based on a template for the help file for mxTools by <a href="http://starship.python.net/crew/lemburg">M.A. Lemburg</a>. This
+  software was created with <a href="http://www.vim.org/">VIM</a>; thanks to
+  the authors of this program and special thanks for the Python syntax support.
+  Thanks to the <a href="http://www.python.org/">Python</a> developers and
+  support community. Thanks to <a href="http://www.atmel.com/">Atmel</a> for
+  making SAM-BA an open interface format, and for even providing its source
+  code. Thanks to all the hard-working people who developed the <a href="http://gcc.gnu.org/">GCC toolchain</a> for ARM.</p>
+
+<p><a name="History"></a></p>
+
+<h2>History</h2>
+  <p>Version 0.5 -- June 25, 2009
+  <ul>
+    <li>The 'flash' command now recognizes the AT91SAM7SE512</li>
+  </ul>
+
+  <p>Version 0.4 -- December 5, 2008
+  <ul>
+    <li>The 'flash' command now supports devices with only 8K of RAM</li>
+  </ul>
+
+  <p>Version 0.3 -- August 5, 2006
+  <ul>
+    <li>Added <tt>tcdrain()</tt> to GO command to make sure it actually
+    gets sent, since SAM-BA sends no acknowledgment.</li>
+    <li>Fixed <tt>info</tt> command for AIC and TC peripherals.</li>
+    <li>Fixed <tt>help flash</tt> information.</li>
+  </ul>
+  <p>Version 0.2 -- June 11, 2006
+  <ul>
+    <li>FLASH programming supported</li>
+    <li>More <tt>info</tt> displayers</li>
+    <li>Added <tt>tgo</tt> command</li>
+    <li>Added <tt>disp</tt> command</li>
+  </ul>
+
+  <p>Version 0.1 -- May 30, 2006
+  <ul>
+    <li>Initial release</li>
+  </ul>
+
+<hr align="LEFT">
+
+<p><center><font size="-1">&COPY; 2009, Copyright by <a href="http://claymore.engineer.gvsu.edu/~steriana">Andrew
+Sterian</a>; All Rights Reserved. mailto: <a href="mailto:steriana@claymore.engineer.gvsu.edu?subject=Sam_I_Am">steriana@claymore.engineer.gvsu.edu</a></font></center>
+
+</body>
+</html>
+<!--
+     FILE ARCHIVED ON 16:03:54 Aug 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 21:04:39 Aug 07, 2019.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  LoadShardBlock: 38.621 (3)
+  esindex: 0.018
+  captures_list: 58.979
+  CDXLines.iter: 13.38 (3)
+  PetaboxLoader3.datanode: 146.059 (4)
+  exclusion.robots: 0.358
+  exclusion.robots.policy: 0.342
+  RedisCDXSource: 2.277
+  PetaboxLoader3.resolve: 140.218
+  load_resource: 258.188
+-->
